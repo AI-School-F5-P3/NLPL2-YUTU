@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, cross_val_score
@@ -44,7 +45,14 @@ if __name__ == "__main__":
     X_train = np.load('X_train.npy')
     y_train = np.load('y_train.npy')
     
-    best_log_reg, best_rf = train_model(X_train, y_train)
+    best_log_reg, best_rf, results = train_model(X_train, y_train)
+    
+    # Crear DataFrame con los resultados
+    results_df = pd.DataFrame(results)
+    
+    # Guardar resultados en CSV
+    results_df.to_csv('model_results.csv', index=False)
+    print("Results saved to model_results.csv")
     
     dump(best_log_reg, 'best_log_reg.joblib')
     dump(best_rf, 'best_rf.joblib')

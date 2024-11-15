@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
 from sklearn.metrics import accuracy_score, f1_score, recall_score, roc_auc_score
 import matplotlib.pyplot as plt
+import seaborn as sns
 from joblib import load
 
 def evaluate_model(model, X_train, y_train, X_test, y_test):

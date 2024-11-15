@@ -2,7 +2,7 @@ from joblib import load
 import numpy as np
 
 def load_model_and_vectorizer():
-    model = load('best_log_reg.joblib')  # o 'best_rf.joblib' si prefieres usar Random Forest
+    model = load('best_log_reg.joblib')  
     vectorizer = load('vectorizer.joblib')
     return model, vectorizer
 
@@ -15,7 +15,7 @@ def predict_toxicity(text, model, vectorizer):
 if __name__ == "__main__":
     model, vectorizer = load_model_and_vectorizer()
     
-    # Ejemplo de uso
+ 
     text = "Este es un comentario de ejemplo"
     prediction, probability = predict_toxicity(text, model, vectorizer)
     print(f"Predicción: {'Tóxico' if prediction else 'No tóxico'}")
