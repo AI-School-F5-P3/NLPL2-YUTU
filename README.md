@@ -9,7 +9,7 @@ YouTube ha solicitado una solución automatizada para identificar mensajes de od
 ## Tecnologías
 
 - **Python**: Lenguaje de programación principal.
-- **spaCy**: Librería de NLP para preprocesamiento de texto.
+- **NLTK**: Librería de NLP para preprocesamiento de texto.
 - **scikit-learn**: Modelos de ML y herramientas de validación.
 - **Flask/FastAPI**: Framework para la creación de la API.
 - **Docker**: Para empaquetar la aplicación.
