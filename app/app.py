@@ -3,29 +3,72 @@ import pandas as pd
 import datetime
 from flask import Flask, request, jsonify, render_template
 from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+from google.auth.exceptions import DefaultCredentialsError
 from sklearn.feature_extraction.text import TfidfVectorizer
 from pymongo import MongoClient
+from pymongo.errors import ConfigurationError
 from dotenv import load_dotenv
+from scraping import get_comments_selenium
 import os
+
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
 # Acceder a las variables de entorno
 DB_URI = os.getenv('DB_URI')
-API_KEY = os.getenv('MI_API_KEY')
+API_KEY = os.getenv('API_KEY')
+
+# Verificar que DB_URI no está vacío
+if not DB_URI:
+    raise ConfigurationError("DB_URI no está definido en el archivo .env")
 
 # Configurar la aplicación Flask
 app = Flask(__name__)
 
-# Cargar el modelo y vectorizador
-model = joblib.load('models/svm_model.pkl')
-vectorizer = joblib.load('models/vectorizer.pkl')
+# Obtener la ruta base del proyecto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Configuración de la base de datos y la API de YouTube usando variables de entorno
-client = MongoClient(DB_URI)
-db = client.youtube_comments
-youtube = build('youtube', 'v3', developerKey=API_KEY)
+try:
+    # Cargar el modelo y vectorizador
+    model = joblib.load(os.path.join(BASE_DIR, 'models', 'svm_model.pkl'))
+    vectorizer = joblib.load(os.path.join(BASE_DIR, 'models', 'vectorizer.pkl'))
+    print("Modelo y vectorizador cargados exitosamente")
+          
+    # Configuración de la base de datos y la API de YouTube usando variables de entorno
+    client = MongoClient(DB_URI)
+    # Verificar la conexión
+    client.admin.command('ping')
+    print("¡Conexión exitosa a MongoDB!")
+    db = client.youtube_comments
+    try:
+    # Verificar que la API_KEY existe
+        if not API_KEY:
+            raise ValueError("API_KEY no está definida en el archivo .env")
+        
+        # Crear el servicio de YouTube
+        youtube = build(
+            'youtube', 
+            'v3', 
+            developerKey=API_KEY,
+            static_discovery=False  # Añade este parámetro
+        )
+        print("Cliente de YouTube configurado exitosamente")
+        
+    except ValueError as e:
+        print(f"Error con la API key: {str(e)}")
+        raise
+    except Exception as e:
+        print(f"Error al configurar el cliente de YouTube: {str(e)}")
+        raise
+
+except ConfigurationError as e:
+    print(f"Error de configuración de MongoDB: {str(e)}")
+    raise
+except Exception as e:
+    print(f"Error al conectar con MongoDB: {str(e)}")
+    raise
 
 # Función para extraer comentarios de un video de YouTube
 def get_comments(video_id):
@@ -42,6 +85,34 @@ def get_comments(video_id):
         comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
         comments.append(comment)
     return comments
+
+
+# Después de cargar las variables de entorno
+print(f"DB_URI está definido: {'Sí' if DB_URI else 'No'}")
+if DB_URI:
+    # Ocultar la contraseña si existe
+    safe_uri = DB_URI.replace('//:' if '//:' in DB_URI else '//', '//***:***@')
+    print(f"DB_URI format: {safe_uri}")
+
+def predict_comment(comment):
+    """
+    Utiliza el modelo y el vectorizador cargados para predecir si un comentario contiene odio.
+    Retorna 1 para odio y 0 para no odio.
+    """
+    print(f"Comentario recibido para predecir: {comment}")  
+    # Transformar el comentario en la representación TF-IDF
+    X = vectorizer.transform([comment])
+    print(f"Representación TF-IDF: {X}")
+
+    # Hacer la predicción con el modelo cargado
+    try:
+        prediction = model.predict(X)[0]
+        print(f"Predicción: {prediction}")  # Verifica la predicción
+    except Exception as e:
+        print(f"Error durante la predicción: {e}")
+        prediction = None
+    
+    return prediction
 
 # Función para clasificar comentarios
 def classify_comments(comments):
@@ -67,17 +138,34 @@ def index():
 @app.route('/analyze', methods=['POST'])
 def analyze():
     video_url = request.form['video_url']
-    video_id = video_url.split('v=')[1]  # Extraer el video ID de la URL
-    comments = get_comments(video_id)
+    comments = get_comments_selenium(video_url, max_comments=10)
 
     if not comments:
-        return jsonify({'message': 'No se encontraron comentarios'}), 404
+        return jsonify({'message': 'No se encontraron comentarios o hubo un error'}), 404
 
-    # Clasificar y guardar los resultados en la base de datos
-    results_df = classify_comments(comments)
-    save_to_db(results_df, video_id)
-
-    return results_df.to_json(orient='records')
+    results = []
+    for comment in comments:
+        prediction = predict_comment(comment)
+        # Verifica si la predicción es válida antes de generar el resultado
+        if prediction is None:
+            result_text = "Hubo un error al procesar el comentario."
+        else:
+            result_text = "Comentario más amable!" if prediction == 0 else "El comentario contiene frases o palabras de odio."
+            
+        # Guardar en MongoDB
+        db.comments.insert_one({
+            "video_id": video_url.split('=')[-1],
+            "comment": comment,
+            "prediction": prediction,
+            "timestamp": datetime.datetime.utcnow()
+        })
+        
+        results.append({
+            "comment": comment,
+            "result": result_text
+        })
+    
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(debug=True)
