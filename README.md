@@ -28,23 +28,23 @@ Antes de ejecutar el proyecto, asegúrate de contar con:
 ### 🔧 Configuración del Entorno
 
 1. **Crear entorno virtual**:
-```bash
+
 python -m venv env
 source env/bin/activate  # En Windows: env\Scripts\activate
 
 **## Instalar dependencias:**
 
-bashCopypip install -r requirements.txt
+pip install -r requirements.txt
 
 **## Clonar repositorio:**
 
-bashCopygit clone https://github.com/AI-School-F5-P3/NLPL2-YUTU.git
+git clone https://github.com/AI-School-F5-P3/NLPL2-YUTU.git
 cd NLPL2-YUTU
 
 ** ## Configurar variables de entorno:**
 Crea un archivo .env con:
 
-CopyAPI_KEY=TU_CLAVE_API_YOUTUBE
+API_KEY=TU_CLAVE_API_YOUTUBE
 
 **## 🖥 Ejecución**
 Inicia la aplicación Flask:
