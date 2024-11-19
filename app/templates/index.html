@@ -2,10 +2,9 @@
 <html lang="es" xml:lang="es">
 <head>
     
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 
     <title>Clasificador de Discurso de Odio</title>
@@ -37,33 +36,40 @@
    
 </body>
     
-    <script>
-        const form = document.getElementById('analyzeForm');
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const url = "http://127.0.0.1:5000/analyze"; 
-            const formData = new FormData(form);
-        
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                });
-        
-                const resultsDiv = document.getElementById('results');
-        
-                if (response.ok) {
-                    const data = await response.text();
-                    resultsDiv.innerHTML = data;
-                } else {
-                    const errorText = await response.text();
-                    resultsDiv.innerHTML = `<p>Error en la solicitud: ${response.status} - ${errorText}</p>`;
-                }
-            } catch (error) {
-                const resultsDiv = document.getElementById('results');
-                resultsDiv.innerHTML = `<p>Error al procesar la solicitud: ${error.message}</p>`;
-            }
+<script>
+    const form = document.getElementById('analyzeForm');
+    form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const url = "http://127.0.0.1:5000/analyze"; 
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
         });
-    </script>
+
+        const resultsDiv = document.getElementById('results');
+
+        if (response.ok) {
+            const data = await response.json(); // Aquí se asegura que se parsea como JSON
+            resultsDiv.innerHTML = `
+                <h4>Comentario:</h4><p>${data.comment}</p>
+                <h4>Resultado:</h4><p>${data.message}</p>
+                <h4>Base de datos:</h4><p>${data.database_message}</p>
+            `;
+        } else {
+            const errorText = await response.json(); // Intentar parsear el error como JSON
+            resultsDiv.innerHTML = `<p>Error: ${errorText.error || 'Error desconocido'}</p>`;
+        }
+    } catch (error) {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = `<p>Error al procesar la solicitud: ${error.message}</p>`;
+    }
+});
+
+</script>
+
+   
 
 </html>
