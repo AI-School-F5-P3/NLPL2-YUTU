@@ -12,7 +12,7 @@ YouTube ha solicitado una solución automatizada para identificar mensajes de od
 - **NLTK**: Librería de NLP para preprocesamiento de texto 📊
 - **scikit-learn**: Modelos de ML y herramientas de validación 🤖
 - **Flask**: Framework para la creación de la API 🌐
-- **Bootstrap y HTML**:Para la interfaz
+- **Bootstrap, CSS y HTML**:Para la interfaz
 - **MongoDB**: Base de datos para guardar comentarios y predicciones 💾
 
 ## 🚀 Instrucciones de Uso
