@@ -47,7 +47,8 @@ cd NLPL2-YUTU
 ## Configurar variables de entorno:
 Crea un archivo .env con:
 
-API_KEY=TU_CLAVE_API_YOUTUBE
+API_KEY=os.getenv('TU_CLAVE_API_YOUTUBE')
+DB_URI = os.getenv('DB_URI')
 
 ### 🖥 Ejecución
 Inicia la aplicación Flask:
