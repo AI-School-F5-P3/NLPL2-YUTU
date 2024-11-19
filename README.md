@@ -41,7 +41,7 @@ pip install -r requirements.txt
 git clone https://github.com/AI-School-F5-P3/NLPL2-YUTU.git
 cd NLPL2-YUTU
 
-** ## Configurar variables de entorno:**
+## Configurar variables de entorno:
 Crea un archivo .env con:
 
 API_KEY=TU_CLAVE_API_YOUTUBE
