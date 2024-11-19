@@ -149,9 +149,10 @@ def analyze():
         # Verifica si la predicción es válida antes de generar el resultado
         if prediction is None:
             result_text = "Hubo un error al procesar el comentario."
+        elif prediction == 1:
+            result_text = "El comentario contiene frases o palabras de odio."
         else:
-            result_text = "Comentario más amable!" if prediction == 0 else "El comentario contiene frases o palabras de odio."
-            
+            result_text = "Comentario más amable!"
         # Guardar en MongoDB
         db.comments.insert_one({
             "video_id": video_url.split('=')[-1],
@@ -164,7 +165,7 @@ def analyze():
             "comment": comment,
             "result": result_text
         })
-    
+    print(results)
     return jsonify(results)
 
 if __name__ == '__main__':
