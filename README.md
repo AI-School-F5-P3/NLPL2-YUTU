@@ -78,11 +78,3 @@ https://www.canva.com/design/DAGW1d7pzp4/dGlLRsgDn157y_HR5vbiaw/edit?utm_content
 
 Trello:
 https://trello.com/invite/b/6731e945aef605c25c9d3da8/ATTI99556f4999363da67811018b1ae0adaa05D601BE/youtube-project-ml
-## Links de la presentaciòn y espacio de trabajo
-
-canva:
-https://www.canva.com/design/DAGW1d7pzp4/dGlLRsgDn157y_HR5vbiaw/edit?utm_content=DAGW1d7pzp4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
-
-
-Trello:
-https://trello.com/invite/b/6731e945aef605c25c9d3da8/ATTI99556f4999363da67811018b1ae0adaa05D601BE/youtube-project-ml
