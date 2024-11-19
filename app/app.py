@@ -20,7 +20,7 @@ def classify_comment(comment):
     prediction = model.predict(vectorized_comment)
     
     # Mensaje basado en la predicción
-    message = " 😱 El comentario contiene frases o palabras de odio." if prediction[0] == 'Negative' else "¡Qué comentario más amable! 🥰 No es discurso de odio"
+    message = " 😱 El comentario contiene frases o palabras de odio." if prediction[0] == 'Negative' else "¡Buen comentario! 🥰 No es discurso de odio"
     
     return {"comment": comment, "message": message}
 
