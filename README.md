@@ -32,24 +32,28 @@ Antes de ejecutar el proyecto, asegúrate de contar con:
 python -m venv env
 source env/bin/activate  # En Windows: env\Scripts\activate
 
-Instalar dependencias:
+**## Instalar dependencias:**
 
 bashCopypip install -r requirements.txt
 
-Clonar repositorio:
+**## Clonar repositorio:**
 
 bashCopygit clone https://github.com/AI-School-F5-P3/NLPL2-YUTU.git
 cd NLPL2-YUTU
 
-Configurar variables de entorno:
+** ## Configurar variables de entorno:**
 Crea un archivo .env con:
 
 CopyAPI_KEY=TU_CLAVE_API_YOUTUBE
-🖥 Ejecución
+
+**## 🖥 Ejecución**
 Inicia la aplicación Flask:
-bashCopypython app.py
+python app.py
+
 La aplicación estará disponible en: http://127.0.0.1:5000/
-🌍 Uso en la Plataforma Web
+
+**## 🌍 Uso en la Plataforma Web
+**
 
 Abre tu navegador en: http://127.0.0.1:5000/
 Opciones:
@@ -59,9 +63,9 @@ Obtener comentarios de un video de YouTube
 
 
 
-⚠️ Nota: Requiere clave API de YouTube válida.
+## ⚠️ Nota: Requiere clave API de YouTube válida.
 
-🤝 Contribuciones
+## 🤝 Contribuciones
 ¡Las contribuciones son bienvenidas! Por favor, lee las guías de contribución antes de enviar un pull request.
 
 
