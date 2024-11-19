@@ -32,11 +32,11 @@ Antes de ejecutar el proyecto, asegúrate de contar con:
 python -m venv env
 source env/bin/activate  # En Windows: env\Scripts\activate
 
-**### Instalar dependencias:**
+### Instalar dependencias:
 
 pip install -r requirements.txt
 
-**### Clonar repositorio:**
+### Clonar repositorio:
 
 git clone https://github.com/AI-School-F5-P3/NLPL2-YUTU.git
 cd NLPL2-YUTU
@@ -46,13 +46,13 @@ Crea un archivo .env con:
 
 API_KEY=TU_CLAVE_API_YOUTUBE
 
-**### 🖥 Ejecución**
+### 🖥 Ejecución
 Inicia la aplicación Flask:
 python app.py
 
 La aplicación estará disponible en: http://127.0.0.1:5000/
 
-**### 🌍 Uso en la Plataforma Web**
+### 🌍 Uso en la Plataforma Web
 
 Abre tu navegador en: http://127.0.0.1:5000/
 Opciones:
