@@ -4,8 +4,6 @@ import pandas as pd
 from datetime import datetime
 from flask_cors import CORS
 
-
-
 # Configuración de Flask
 app = Flask(__name__)
 CORS(app)
@@ -15,7 +13,6 @@ vectorizer = joblib.load('vectorizer.pkl')
 
 # Clasificar un comentario
 def classify_comment(comment):
-  
     # Vectorizar el comentario
     vectorized_comment = vectorizer.transform([comment])
     
@@ -23,7 +20,7 @@ def classify_comment(comment):
     prediction = model.predict(vectorized_comment)
     
     # Mensaje basado en la predicción
-    message = "El comentario contiene frases o palabras de odio." if prediction[0] == 'Negative' else "¡Qué comentario más amable! No es discurso de odio"
+    message = " 😱 El comentario contiene frases o palabras de odio." if prediction[0] == 'Negative' else "¡Qué comentario más amable! 🥰 No es discurso de odio"
     
     return {"comment": comment, "message": message}
 
@@ -41,10 +38,10 @@ def analyze():
         # Clasificar el comentario
         result = classify_comment(comment)
         
-        return jsonify(result)
+        # Retornar un mensaje
+        return f"<h4>Comentario:</h4><p>{result['comment']}</p><h4>Resultado:</h4><p>{result['message']}</p>"
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
+        return f"<p>Error: {str(e)}</p>", 500
 
 if __name__ == '__main__':
     app.run(debug=True)

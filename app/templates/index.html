@@ -12,7 +12,7 @@
                 <label for="video_url" class="form-label">¿Este comentario tiene un discurso de odio?</label>
                 <input type="text" class="form-control" name="analysis_comment" placeholder="Ingrese el comentario" required>
             </div>
-            <button type="submit" class="btn btn-primary">Analizar</button>
+            <button type="submit" class="btn btn-info">Analizar</button>
         </form>
         <div id="results" class="mt-5"></div>
     </div>
@@ -21,7 +21,7 @@
         const form = document.getElementById('analyzeForm');
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const url = "http://127.0.0.1:5000/analyze"; // Asegúrate de que este puerto y URL coincidan con Flask
+            const url = "http://127.0.0.1:5000/analyze"; 
             const formData = new FormData(form);
         
             try {
@@ -33,8 +33,8 @@
                 const resultsDiv = document.getElementById('results');
         
                 if (response.ok) {
-                    const data = await response.json();
-                    resultsDiv.innerHTML = '<h4>Resultados:</h4><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    const data = await response.text();
+                    resultsDiv.innerHTML = data;
                 } else {
                     const errorText = await response.text();
                     resultsDiv.innerHTML = `<p>Error en la solicitud: ${response.status} - ${errorText}</p>`;
@@ -44,10 +44,6 @@
                 resultsDiv.innerHTML = `<p>Error al procesar la solicitud: ${error.message}</p>`;
             }
         });
-        
-        
-    
     </script>
-    
 </body>
 </html>
